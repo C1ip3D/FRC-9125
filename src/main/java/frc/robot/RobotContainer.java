@@ -1,9 +1,8 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DriveCommand;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -19,7 +18,7 @@ public class RobotContainer {
   private final DrivetrainSubsystem m_robotDrive = new DrivetrainSubsystem();
 
   // The driver's controller
-  XboxController m_driverController = new XboxController(OIConstants.DRIVER_CONTROLLER_PORT);
+  private final CommandXboxController m_driverController = new CommandXboxController(OIConstants.DRIVER_CONTROLLER_PORT);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -38,8 +37,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
       // Start button zero gyro
-      new JoystickButton(m_driverController, XboxController.Button.kStart.value)
-          .onTrue(new InstantCommand(() -> m_robotDrive.zeroGyro()));
+      m_driverController.start().onTrue(new InstantCommand(() -> m_robotDrive.zeroGyro()));
   }
 
   /**

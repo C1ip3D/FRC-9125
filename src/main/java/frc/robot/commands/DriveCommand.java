@@ -1,17 +1,17 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
 public class DriveCommand extends Command {
     private final DrivetrainSubsystem m_drivetrain;
-    private final XboxController m_controller;
+    private final CommandXboxController m_controller;
 
-    public DriveCommand(DrivetrainSubsystem drivetrain, XboxController controller) {
+    public DriveCommand(DrivetrainSubsystem drivetrain, CommandXboxController controller) {
         m_drivetrain = drivetrain;
         m_controller = controller;
         addRequirements(drivetrain);
@@ -19,8 +19,13 @@ public class DriveCommand extends Command {
 
     @Override
     public void execute() {
+        // Simple check to see if the controller is even plugged in
+        if (!m_controller.getHID().isConnected()) {
+            return;
+        }
+
         // Slow mode toggle
-        double speedMultiplier = m_controller.getRightBumper() ? 0.5 : 1.0;
+        double speedMultiplier = m_controller.rightBumper().getAsBoolean() ? 0.5 : 1.0;
 
         // Get joystick inputs
         // The Y acts as forward/backward (X in field coordinates)
