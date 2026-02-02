@@ -28,18 +28,22 @@ public class DriveCommand extends Command {
         double speedMultiplier = m_controller.rightBumper().getAsBoolean() ? 0.5 : 1.0;
 
         // Get joystick inputs
-        // The Y acts as forward/backward (X in field coordinates)
-        // The X acts as left/right (Y in field coordinates)
+        // LEFT STICK: Controls robot translation (movement)
+        // - Y acts as forward/backward (X in field coordinates)
+        // - X acts as left/right (Y in field coordinates)
         // We invert Y because pushing the stick forward returns a negative value
-        double xSpeed = -MathUtil.applyDeadband(m_controller.getLeftY(), OIConstants.DRIVE_DEADBAND) 
-            * DriveConstants.MAX_SPEED_METERS_PER_SECOND * speedMultiplier;
-            
-        double ySpeed = -MathUtil.applyDeadband(m_controller.getLeftX(), OIConstants.DRIVE_DEADBAND) 
-            * DriveConstants.MAX_SPEED_METERS_PER_SECOND * speedMultiplier;
-            
-        double rot = -MathUtil.applyDeadband(m_controller.getRightX(), OIConstants.DRIVE_DEADBAND) 
-            * DriveConstants.MAX_ANGULAR_SPEED * speedMultiplier;
+        double xSpeed = -MathUtil.applyDeadband(m_controller.getLeftY(), OIConstants.DRIVE_DEADBAND)
+                * DriveConstants.MAX_SPEED_METERS_PER_SECOND * speedMultiplier;
 
+        double ySpeed = -MathUtil.applyDeadband(m_controller.getLeftX(), OIConstants.DRIVE_DEADBAND)
+                * DriveConstants.MAX_SPEED_METERS_PER_SECOND * speedMultiplier;
+
+        // RIGHT STICK: Controls robot rotation
+        // - X acts as rotation (positive is counter-clockwise)
+        double rot = -MathUtil.applyDeadband(m_controller.getRightX(), OIConstants.DRIVE_DEADBAND)
+                * DriveConstants.MAX_ANGULAR_SPEED * speedMultiplier;
+
+        // Apply movement to drivetrain
         m_drivetrain.drive(xSpeed, ySpeed, rot, true);
     }
 }
